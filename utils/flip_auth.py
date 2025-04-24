@@ -16,7 +16,7 @@ REFRESH_TOKEN = os.getenv('REFRESH_TOKEN')
 APP_PLATFORM = os.getenv('APP_PLATFORM')
 WEB_VERSION = os.getenv('WEB_VERSION')
 DEVICE_FP = os.getenv('DEVICE_FP')
-GET_ACCESS_TOKEN_THROUGH_REFRESH_TOKEN_PATH = os.getenv('GET_ACCESS_TOKEN_THROUGH_REFRESH_TOKEN_PATH')
+REFRESH_TOKEN_PATH = os.getenv('REFRESH_TOKEN_PATH')
 X_FLIPINATOR_TOOLS = os.getenv('X_FLIPINATOR_TOOLS')
 
 TOKEN_CACHE = {
@@ -49,11 +49,12 @@ def refresh_access_token():
         logger.error("REFRESH_TOKEN environment variable is not set")
         return None
         
-    url = FLIP_BASE_URL + GET_ACCESS_TOKEN_THROUGH_REFRESH_TOKEN_PATH
+    url = FLIP_BASE_URL + REFRESH_TOKEN_PATH
     headers = {
         "App-Platform": APP_PLATFORM,
         "web-version": WEB_VERSION,
         "device-fp": DEVICE_FP,
+        'x-flipinator-tools': X_FLIPINATOR_TOOLS
     }
     parameters = {
         "refreshToken": REFRESH_TOKEN
