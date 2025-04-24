@@ -40,14 +40,14 @@ def approve_fcc_orders():
         if pmc == "credits" and order_state == "pendingApproval":
             success, _ = approve_order(token, order_id)
             if success:
-                print(
-                    f"Approved {flip_id} / {order_id}"
-                    f"paymentMethodCode={pmc}, state={order_state}"
+                logger.info(
+                    f"Approved {flip_id} / {order_id} "
+                    f"pmc={pmc}, state={order_state}"
                 )
         else:
             logger.info(
                 f"Skipping order: {flip_id} / {order_id} "
-                f"(pmc={pmc!r}, state={order_state!r})"
+                f"pmc={pmc!r}, state={order_state!r}"
             )
 
 if __name__ == "__main__":
