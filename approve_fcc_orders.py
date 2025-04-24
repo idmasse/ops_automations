@@ -1,4 +1,4 @@
-from utils.flip_auth import get_flip_access_token, get_headers
+from utils.flip_auth import get_flip_access_token
 from api.flip_api import list_orders, get_order_details, approve_order
 from dotenv import load_dotenv
 import logging
@@ -14,11 +14,11 @@ def approve_fcc_orders():
         logger.error('could not obtain access-token')
         exit(1)
 
-    order_data = list_orders(token, page=1, limit=100) # 1. get all order data from page one
-    orders = order_data.get('data', []) # 2. get just the data
+    order_data = list_orders(token, page=1, limit=500, states=['pendingApproval']) # 1. get latest pending approval orders
+    orders = order_data.get('data', []) # 2. get just the {data}
 
     order_ids = [oid['id'] for oid in orders] # 3. get just the order IDs
-    logger.info(f'found {len(order_ids)} order ids on page 1')
+    logger.info(f'found {len(order_ids)} pending approval order ids')
 
     #4. fetch order dtails for each order
     order_details_list = []
@@ -37,10 +37,18 @@ def approve_fcc_orders():
         pmc = order_obj.get('paymentMethodCode')
         order_state = order_obj.get('state')
         
-        if pmc == 'credits' and order_state == 'pendingApproval':
-            approve_order(token, order_id)
+        if pmc == "credits" and order_state == "pendingApproval":
+            success, _ = approve_order(token, order_id)
+            if success:
+                print(
+                    f"Approved {flip_id} / {order_id}"
+                    f"paymentMethodCode={pmc}, state={order_state}"
+                )
         else:
-            logger.info(f"skipping order: {flip_id} / {order_id}. pmc: {pmc}, order state: {order_state}")
+            logger.info(
+                f"Skipping order: {flip_id} / {order_id} "
+                f"(pmc={pmc!r}, state={order_state!r})"
+            )
 
 if __name__ == "__main__":
     approve_fcc_orders()

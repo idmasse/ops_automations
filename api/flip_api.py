@@ -21,10 +21,14 @@ ORDER_STATES = [
             "readyToShip","pendingPick","shipped","withCustomer","pendingPickup",
             "pendingDropOff","pickupMissed","inTransit","inboundTransit",
             "outboundTransit","backInOPS","returnConfirmed","returnConfirmedFailed",
-            "completed","cancelled","paymentInReview","revisionFailed"
+            "completed","cancelled","paymentInReview","revisionFailed","pendingApproval"
             ]
 
-def list_orders(token, page=1, limit=100):
+def list_orders(token, page=1, limit=100, states=None):
+
+    if states is None:
+        states = ORDER_STATES
+
     url = f'{FLIP_BASE_URL}{ORDER_LIST_PATH}'
     params = {
         "page": page,
