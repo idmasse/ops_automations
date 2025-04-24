@@ -3,3 +3,4 @@ venv/
 .env
 *.ini
 *.json
+.DS_Store
