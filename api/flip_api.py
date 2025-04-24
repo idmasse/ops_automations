@@ -1,7 +1,7 @@
 import os
 import logging
 import requests
-from datetime import datetime
+import urllib.parse
 from utils.flip_auth import get_headers
 from dotenv import load_dotenv
 
@@ -33,8 +33,12 @@ def list_orders(token, page=1, limit=100, states=None):
     params = {
         "page": page,
         "limit": limit,
-        "state": ",".join(ORDER_STATES)
+        "state": ",".join(states)
     }
+
+    full_url = f'{url}?{urllib.parse.urlencode(params)}' #confim params are working
+    logger.info(f'calling list_orders url: {full_url}')
+
     headers = get_headers(token)
     response = requests.get(url, headers=headers, params=params)
     response.raise_for_status()
@@ -55,10 +59,9 @@ def approve_order(token, order_id):
         response.raise_for_status()
         result = response.json()
         success = result.get('success', False)
-        if success:
-            logger.info(f'order: {order_id} successfully approved')
-        else:
+        if not success:
             logger.warning(f'order: {order_id} failed to approve: {result}')
+        
         return success, result
     
     except requests.HTTPError as http_err:
