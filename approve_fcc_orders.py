@@ -1,5 +1,5 @@
 from utils.flip_auth import get_flip_access_token
-from api.flip_api import list_orders, get_order_details, approve_order
+from api.orders_api import list_orders, get_order_details, approve_order
 from dotenv import load_dotenv
 import logging
 
