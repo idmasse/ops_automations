@@ -1,5 +1,5 @@
 from utils.flip_auth import get_flip_access_token
-from api.flip_api import list_orders, get_order_details, cancel_order
+from api.orders_api import list_orders, get_order_details, cancel_order
 from dotenv import load_dotenv
 import logging
 
@@ -32,12 +32,15 @@ def cancel_nyc_banned_ingredients():
 
     for order_id, detail in zip(order_ids, order_details_list):
         order = detail.get("order", {})
-
+        
         # top‐level order fields
         order_flip_id   = order.get("orderID")
         order_state     = order.get("state")
         order_tag       = order.get("tag")
-        order_status    = order.get("orderStatus")
+
+        # customer level fields
+        customer_obj    = order.get('customer')
+        order_status    = customer_obj.get("orderStatus")
 
         # shipping address state
         shipping_state  = order.get("shippingAddress", {}).get("state")
