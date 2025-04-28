@@ -19,9 +19,8 @@ def cancel_nyc_banned_ingredients():
         logger.error('could not obtain access token')
         exit(1)
 
-    order_data = list_orders(token, page=1, limit=500, states=['OOSItem','giftPending','stylistApproval','readyToShip'])
+    order_data = list_orders(token, page=1, limit=500, states=['stylistApproval'])
     orders = order_data.get('data', [])
-
     order_ids = [oid['id'] for oid in orders]
     
     order_details_list = []
