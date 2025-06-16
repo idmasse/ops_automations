@@ -1,9 +1,8 @@
 import os
 import logging
 import requests
-import time
 import json
-from utils.flip_auth import get_headers, get_flip_access_token
+from api.auth_api import get_headers, get_flip_access_token
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -22,7 +21,7 @@ UPDATE_CS_EMAIL_PATH = '/shop/brands/management/request-customer-support-email-c
 # /shop/admin/brands/onboarding/update/v1
 def update_return_addr(brand_id, token, retry=True):
     url = f'{FLIP_BASE_URL}{UPDATE_PROFILE_PATH}'
-    headers = get_headers(token)
+    headers = get_headers()
     payload = {
         'id': brand_id,
         'operationData': {

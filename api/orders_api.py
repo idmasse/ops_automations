@@ -2,7 +2,7 @@ import os
 import logging
 import requests
 import urllib.parse
-from utils.flip_auth import get_headers
+from api.auth_api import get_headers
 from dotenv import load_dotenv
 
 load_dotenv()
