@@ -1,4 +1,4 @@
-from utils.flip_auth import get_flip_access_token
+from api.auth_api import get_flip_access_token
 from api.orders_api import list_orders, get_order_details, cancel_order
 from dotenv import load_dotenv
 import logging
@@ -54,13 +54,13 @@ def cancel_nyc_banned_ingredients():
             desc_lower          = item_long_desc.lower()
             
             if (
-        order_state in {"OOSItem", "giftPending", "stylistApproval", "readyToShip"}
-        and order_tag not in {"payment-in-review", "test"}
-        and shipping_state == "New York"
-        and item_category == "Vitamins & Supplements"
-        and order_status != "cancelled"
-        and any((keyword in desc_lower) or (keyword in title_lower) for keyword in KEYWORDS)
-    ):
+                order_state in {"OOSItem", "giftPending", "stylistApproval", "readyToShip"}
+                and order_tag not in {"payment-in-review", "test"}
+                and shipping_state == "New York"
+                and item_category == "Vitamins & Supplements"
+                and order_status != "cancelled"
+                and any((keyword in desc_lower) or (keyword in title_lower) for keyword in KEYWORDS)
+            ):
                 logger.info(f'cancelling order {order_flip_id} / {order_id}')
                 cancel_order(token, order_id)
                 break
