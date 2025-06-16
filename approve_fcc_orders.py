@@ -1,4 +1,4 @@
-from utils.flip_auth import get_flip_access_token
+from api.auth_api import get_flip_access_token
 from api.orders_api import list_orders, get_order_details, approve_order
 from dotenv import load_dotenv
 import logging
@@ -33,7 +33,7 @@ def approve_fcc_orders():
     # 5. check payment method and approve credit orders
     for order_id, detail in zip(order_ids, order_details_list):
         order_obj = detail.get('order', {})
-        flip_id = order_obj.get('orderID')
+        flip_order_id = order_obj.get('orderID')
         pmc = order_obj.get('paymentMethodCode')
         order_state = order_obj.get('state')
         
@@ -41,12 +41,12 @@ def approve_fcc_orders():
             success, _ = approve_order(token, order_id)
             if success:
                 logger.info(
-                    f"Approved {flip_id} / {order_id} "
+                    f"Approved {flip_order_id} / {order_id} "
                     f"pmc={pmc}, state={order_state}"
                 )
         else:
             logger.info(
-                f"Skipping order: {flip_id} / {order_id} "
+                f"Skipping order: {flip_order_id} / {order_id} "
                 f"pmc={pmc!r}, state={order_state!r}"
             )
 
